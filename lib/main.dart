@@ -37,6 +37,7 @@ Future<void> _loadShops(Isar isar) async {
 }
 
 class ShopRepository {
+  // Shops DB操作
   ShopRepository(this.isar) {
     isar.shops.watchLazy().listen((event) async {
       if (!isar.isOpen) {
