@@ -1,117 +1,19 @@
-import 'dart:async';
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_application_1/schema/shops.dart';
-import 'package:isar/isar.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:flutter_application_1/components/insert_dummy_data_button.dart';
+import 'package:flutter_application_1/provider/shop_provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-Future<void> _loadShops(Isar isar) async {
-  try {
-    final bytes = await rootBundle.load('assets/shops.json');
-    final jsonStr = const Utf8Decoder().convert(bytes.buffer.asUint8List());
-    final json = jsonDecode(jsonStr) as List;
-
-    // jsonのパース
-    final shops = <Shop>[];
-    json.asMap().forEach((int i, dynamic e) {
-      shops.add(Shop(id: i + 1, name: e['name'], address: e['address']));
-    });
-    final shopCollection = isar.collection<Shop>();
-
-    // 過去データの削除
-    final oldShops = await shopCollection.where().findAll();
-    if (oldShops.isNotEmpty) {
-      for (Shop oldShop in oldShops) {
-        await shopCollection.delete(oldShop.id);
-      }
-    }
-    // 新規データの追加
-    isar.writeTxn(() async {
-      await shopCollection.putAll(shops.toList());
-    });
-  } catch (e) {
-    debugPrint(e.toString());
-  }
-}
-
-class ShopRepository {
-  // Shops DB操作
-  ShopRepository(this.isar) {
-    isar.shops.watchLazy().listen((event) async {
-      if (!isar.isOpen) {
-        return;
-      }
-
-      if (_shopStreamController.isClosed) {
-        return;
-      }
-
-      _shopStreamController.add(await getShops());
-    });
-  }
-
-  final Isar isar;
-
-  final _shopStreamController = StreamController<List<Shop>>.broadcast();
-  Stream<List<Shop>> get shopStream => _shopStreamController.stream;
-
-  void dispose() {
-    _shopStreamController.close();
-  }
-
-  Future<List<Shop>> getShops() async {
-    if (!isar.isOpen) {
-      return [];
-    }
-
-    return isar.shops.where().findAll();
-  }
-
-  Future<void> addShop(Shop shop) async {
-    if (!isar.isOpen) {
-      return;
-    }
-
-    await isar.writeTxn(() async {
-      await isar.shops.put(shop);
-    });
-  }
-
-  Future<void> deleteShop(Shop shop) async {
-    if (!isar.isOpen) {
-      return;
-    }
-
-    await isar.writeTxn(() async {
-      await isar.shops.delete(shop.id);
-    });
-  }
-}
-
-void main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  final dir = await getApplicationSupportDirectory();
-
-  final isar =
-      await Isar.open([ShopSchema], directory: dir.path, inspector: true);
-
-  await _loadShops(isar);
-
-  // runApp(const MyApp(isar: isar));
-  runApp(MyApp(isar: isar));
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key, required this.isar});
-  final Isar isar;
+  const MyApp({super.key});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    final shopRepository = ShopRepository(isar);
-
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -133,14 +35,46 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
         useMaterial3: true,
       ),
-      home: MyHomePage(title: '', shopRepository: shopRepository),
+      home: const MyHomePage(title: ''),
     );
   }
 }
 
+class ShopList extends ConsumerWidget {
+  const ShopList({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final shops = ref.watch(shopNotifierProvider);
+
+    return Column(children: [
+      const ShopDummyInsertButton(),
+      Expanded(
+          child: ListView.builder(
+        // data: (shops) => ListView.builder(
+        itemCount: shops.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+              title: Row(
+            children: [
+              Image.network(
+                'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl-2.jpg',
+                height: 30,
+                width: 30,
+              ),
+              const SizedBox(width: 16),
+              // Text('アイテム３テスト'),
+              Text(shops[index].name),
+            ],
+          ));
+        },
+      )),
+    ]);
+  }
+}
+
 class MyHomePage extends StatefulWidget {
-  const MyHomePage(
-      {super.key, required this.title, required this.shopRepository});
+  const MyHomePage({super.key, required this.title});
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -153,8 +87,6 @@ class MyHomePage extends StatefulWidget {
 
   final String title;
 
-  final ShopRepository shopRepository;
-
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
@@ -162,23 +94,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   final items = List<String>.generate(100, (i) => "Item $i");
-
-  final shops = <Shop>[];
-
-  @override
-  void initState() {
-    super.initState();
-    widget.shopRepository.shopStream.listen((event) {
-      setState(() {
-        shops.clear();
-        shops.addAll(event);
-      });
-    });
-
-    () async {
-      await widget.shopRepository.getShops();
-    }();
-  }
 
   void _incrementCounter() {
     setState(() {
@@ -209,7 +124,7 @@ class _MyHomePageState extends State<MyHomePage> {
           // Here we take the value from the MyHomePage object that was created by
           // the App.build method, and use it to set our appbar title.
           title: Text(widget.title),
-          actions: [
+          actions: const [
             Icon(Icons.add),
             Icon(Icons.share),
           ]),
@@ -219,26 +134,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
         child: Container(
           color: Colors.grey,
-          child: Padding(
-            padding: const EdgeInsets.all(32),
-            child: ListView.builder(
-                itemCount: items.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Row(
-                      children: [
-                        Image.network(
-                          'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl-2.jpg',
-                          height: 30,
-                          width: 30,
-                        ),
-                        SizedBox(width: 16),
-                        // Text('アイテム３テスト'),
-                        Text(shops[0].name),
-                      ],
-                    ),
-                  );
-                }),
+          child: const Padding(
+            padding: EdgeInsets.all(32),
+            child: ShopList(),
           ),
         ),
       ),
