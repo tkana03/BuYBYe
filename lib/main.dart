@@ -1,12 +1,109 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/components/insert_dummy_data_button.dart';
+import 'package:flutter_application_1/model/isar_repository.dart';
 import 'package:flutter_application_1/provider/item_provider.dart';
 import 'package:flutter_application_1/provider/shop_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_application_1/schema/shops.dart';
+import 'package:isar/isar.dart';
+import 'package:path_provider/path_provider.dart';
 
-void main() {
+import 'package:background_task/background_task.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+// List<String> shopLocationList = [];
+List<LatLng> shopLocationListDefined = [
+  LatLng(30, 140),
+  LatLng(40, 150),
+  LatLng(50, 160),
+];
+
+class LatLng {
+  LatLng(this.lat, this.lng);
+
+  double lat;
+  double lng;
+
+  bool withinErrors(LatLng other) {
+    final latAngle1 = lat.truncate();
+    final latMinute1 = ((lat - latAngle1) * 60).truncate();
+    final latSecond1 = (lat - latAngle1 - latMinute1 / 60) * 3600;
+
+    final latAngle2 = other.lat.truncate();
+    final latMinute2 = ((other.lat - latAngle2) * 60).truncate();
+    final latSecond2 = (other.lat - latAngle2 - latMinute2 / 60) * 3600;
+
+    final latSecondDiff = (latSecond1 - latSecond2).abs();
+    final latOK = latAngle1 == latAngle2 && latMinute1 == latMinute2 && latSecondDiff < 3.75;
+
+    final lngAngle1 = lng.truncate();
+    final lngMinute1 = ((lng - lngAngle1) * 60).truncate();
+    final lngSecond1 = (lng - lngAngle1 - lngMinute1 / 60) * 3600;
+
+    final lngAngle2 = other.lng.truncate();
+    final lngMinute2 = ((other.lng - lngAngle2) * 60).truncate();
+    final lngSecond2 = (other.lng - lngAngle2 - lngMinute2 / 60) * 3600;
+
+    final lngSecondDiff = (lngSecond1 - lngSecond2).abs();
+
+    final lngOK = latOK && lngAngle1 == lngAngle2 && lngMinute1 == lngMinute2 && lngSecondDiff < 5.625;
+
+    return latOK && lngOK;
+  }
+}
+
+// バックグラウンドで位置情報を受け取り，データベース（Isar）に保存する
+@pragma('vm:entry-point')
+void backgroundHandler(Location data) {
+  debugPrint('backgroundHandler: ${DateTime.now()}, $data');
+  // if (shopLocationList.isNotEmpty) {
+  //   for (var shop in shopLocationList) {
+  //     debugPrint('address: $shop');
+  //   }
+  // } else {
+  //   debugPrint('shopLocationList is empty');
+  // }
+
+  if (shopLocationListDefined.isNotEmpty) {
+    final other = LatLng(data.lat ?? 0, data.lng ?? 0);
+    for (var location in shopLocationListDefined) {
+      // debugPrint('address: $shop');
+      if (location.withinErrors(other)) {
+        debugPrint('250m以内: ${location.lat}, ${location.lng}');
+      }
+    }
+  } else {
+    debugPrint('shopLocationListDefined is empty');
+  }
+
+  // Future(() async {
+  //   // debugPrint('backgroundHandler: ${DateTime.now()}, $data');
+  //   await IsarRepository.configure();
+  //   final shops = await IsarRepository.isar.shops.where().findAll();
+
+  //   for (var shop in shops) {
+  //     debugPrint("name: ${shop.name} address: ${shop.address}");
+  //   }
+  //   IsarRepository.isar.writeTxnSync(() {
+  //     final latLng = LatLng()
+  //       ..lat = data.lat ?? 0
+  //       ..lng = data.lng ?? 0;
+  //     IsarRepository.isar.latLngs.putSync(latLng);
+  //   });
+  // });
+}
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  BackgroundTask.instance.setBackgroundHandler(backgroundHandler);
+  await BackgroundTask.instance.start();
   runApp(const ProviderScope(child: MyApp()));
+  //await IsarRepository.configure();
+  //await initializeDateFormatting('ja_JP');
+
+  // runApp(const MyApp(isar: isar));
+  //runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -46,8 +143,20 @@ class ShopList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // if (shopLocationList.isEmpty) {
+    //   () async {
+    //     final shops = await ref.read(shopNotifierProvider.notifier).getShops();
+    //     for (var shop in shops) {
+    //       shopLocationList.add(shop.address);
+    //     }
+    //   }();
+    // }
+
     final shops = ref.watch(shopNotifierProvider);
     final items = ref.watch(itemNotifierProvider);
+
+    // フィルタリング
+    // filteredItems = ...
 
     return Column(children: [
       const ShopDummyInsertButton(),
