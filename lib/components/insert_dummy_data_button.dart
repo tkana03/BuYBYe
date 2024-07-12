@@ -14,8 +14,9 @@ class ShopDummyInsertButton extends ConsumerWidget {
       id: Isar.autoIncrement,
       name: 'Shop x',
       address: 'Address x',
+      lat: 0,
+      lng: 0,
     );
-    // await ref.read(shopRepositoryProvider.notifier).insertShop(newShop);
     await ref.watch(shopNotifierProvider.notifier).insertShop(newShop);
   }
 
@@ -23,13 +24,6 @@ class ShopDummyInsertButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return ElevatedButton(
       onPressed: () => insertShop(ref),
-      style: ElevatedButton.styleFrom(
-        foregroundColor: Colors.black,
-        backgroundColor: Colors.blue,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-      ),
       child: const Text('店舗ダミーデータの追加'),
     );
   }
@@ -43,7 +37,6 @@ class ItemDummyInsertButton extends ConsumerWidget {
       id: Isar.autoIncrement,
       name: 'Item x',
     );
-    // await ref.read(shopRepositoryProvider.notifier).insertShop(newShop);
     await ref.watch(itemNotifierProvider.notifier).insertItem(newItem);
   }
 
@@ -51,13 +44,6 @@ class ItemDummyInsertButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return ElevatedButton(
       onPressed: () => insertItem(ref),
-      style: ElevatedButton.styleFrom(
-        foregroundColor: Colors.black,
-        backgroundColor: Colors.blue,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-      ),
       child: const Text('商品ダミーデータの追加'),
     );
   }
