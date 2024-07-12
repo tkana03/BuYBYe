@@ -50,7 +50,7 @@ class NavigationWidget extends HookWidget {
         const MainScreen(),
 
         /// Notifications page
-        const RegisterItemScreen(),
+        const WishListItemScreen(),
         // const Padding(
         //   padding: EdgeInsets.all(8.0),
         //   child: Column(
