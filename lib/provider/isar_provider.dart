@@ -1,4 +1,3 @@
-import 'package:flutter_application_1/provider/shop_provider.dart';
 import 'package:flutter_application_1/schema/shops.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isar/isar.dart';
@@ -12,11 +11,3 @@ final isarProvider = FutureProvider<Isar>((ref) async {
     directory: dir.path,
   );
 });
-
-class AppRepository {
-  final Ref ref;
-
-  late final ShopNotifier shops = ref.read(shopNotifierProvider.notifier);
-
-  AppRepository(this.ref);
-}

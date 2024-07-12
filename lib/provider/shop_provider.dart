@@ -8,7 +8,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isar/isar.dart';
 
 class ShopNotifier extends StateNotifier<List<Shop>> {
-  ShopNotifier(this.ref) : super([]);
+  ShopNotifier(this.ref) : super([]) {
+    _initialize();
+  }
 
   final Ref ref;
   late final Isar isar;
@@ -39,7 +41,7 @@ class ShopNotifier extends StateNotifier<List<Shop>> {
 
       // 新規データの追加
       for (Shop shop in shops) {
-        ref.read(shopNotifierProvider.notifier).insertShop(shop);
+        insertShop(shop);
       }
     } catch (e) {
       debugPrint(e.toString());
@@ -53,14 +55,10 @@ class ShopNotifier extends StateNotifier<List<Shop>> {
   }
 
   Future<void> insertShop(Shop shop) async {
-    await isar.writeTxn(() async => await isar.shops.put(shop));
-    state = await getShops(); // stateを更新する
+    await isar.writeTxn(() => isar.shops.put(shop));
+    state = [...state, shop];
   }
 }
 
 final shopNotifierProvider =
-    StateNotifierProvider<ShopNotifier, List<Shop>>((ref) {
-  final shopNotifier = ShopNotifier(ref);
-  shopNotifier._initialize();
-  return shopNotifier;
-});
+    StateNotifierProvider<ShopNotifier, List<Shop>>((ref) => ShopNotifier(ref));

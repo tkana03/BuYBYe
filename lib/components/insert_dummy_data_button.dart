@@ -13,7 +13,8 @@ class ShopDummyInsertButton extends ConsumerWidget {
       name: 'Shop x',
       address: 'Address x',
     );
-    await ref.read(shopNotifierProvider.notifier).insertShop(newShop);
+    // await ref.read(shopRepositoryProvider.notifier).insertShop(newShop);
+    await ref.watch(shopNotifierProvider.notifier).insertShop(newShop);
   }
 
   @override
@@ -27,7 +28,7 @@ class ShopDummyInsertButton extends ConsumerWidget {
           borderRadius: BorderRadius.circular(10),
         ),
       ),
-      child: const Text('ダミーデータの追加'),
+      child: const Text('店舗ダミーデータの追加'),
     );
   }
 }
