@@ -1,14 +1,20 @@
 [
     {
-        "name": "Shop 1",
-        "address": "Shop 1 Address"
+        "name": "カスミ 筑波大学店",
+        "address": "〒305-0005 茨城県つくば市天久保３丁目１−１０",
+        "lat": 36.099480074039974,
+        "lng": 140.1034168539723
     },
     {
         "name": "Shop 2",
-        "address": "Shop 2 Address"
+        "address": "Shop 2 Address",
+        "lat": 0.0,
+        "lng": 0.0
     },
     {
         "name": "Shop 3",
-        "address": "Shop 3 Address"
+        "address": "Shop 3 Address",
+        "lat": 0.0,
+        "lng": 0.0
     }
 ]

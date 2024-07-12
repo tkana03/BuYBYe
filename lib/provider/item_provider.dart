@@ -2,22 +2,18 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_application_1/provider/isar_provider.dart';
+import 'package:flutter_application_1/model/isar_repository.dart';
 import 'package:flutter_application_1/schema/items.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isar/isar.dart';
 
 class ItemNotifier extends StateNotifier<List<Item>> {
-  ItemNotifier(this.ref) : super([]) {
+  ItemNotifier() : super([]) {
     _initialize();
   }
 
-  final Ref ref;
-  late final Isar isar;
-
   Future<void> _initialize() async {
-    isar = await ref.read(isarProvider.future);
-
+    await IsarRepository.configure();
     await _registerItems();
     state = await getItems();
   }
@@ -40,7 +36,7 @@ class ItemNotifier extends StateNotifier<List<Item>> {
       final items = <Item>[];
       json.asMap().forEach((int i, dynamic e) {
         items.add(Item(
-          id: i + 1, 
+          id: i + 1,
           name: e['name'],
           // 期限: e['date'], ...
         ));
@@ -56,16 +52,17 @@ class ItemNotifier extends StateNotifier<List<Item>> {
   }
 
   Future<List<Item>> getItems() async {
-    final items = await isar.items.where().findAll();
+    final items = await IsarRepository.isar.items.where().findAll();
     debugPrint('getItems: ${items.length}, ${items.toString()}');
     return items;
   }
 
   Future<void> insertItem(Item item) async {
-    await isar.writeTxn(() => isar.items.put(item));
+    await IsarRepository.isar
+        .writeTxn(() => IsarRepository.isar.items.put(item));
     state = [...state, item];
   }
 }
 
 final itemNotifierProvider =
-    StateNotifierProvider<ItemNotifier, List<Item>>((ref) => ItemNotifier(ref));
+    StateNotifierProvider<ItemNotifier, List<Item>>((ref) => ItemNotifier());

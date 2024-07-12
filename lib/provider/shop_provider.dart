@@ -2,30 +2,21 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_application_1/main.dart';
-import 'package:flutter_application_1/provider/isar_provider.dart';
+import 'package:flutter_application_1/model/isar_repository.dart';
 import 'package:flutter_application_1/schema/shops.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isar/isar.dart';
 
 class ShopNotifier extends StateNotifier<List<Shop>> {
-  ShopNotifier(this.ref) : super([]) {
+  ShopNotifier() : super([]) {
     _initialize();
   }
 
-  final Ref ref;
-  late final Isar isar;
-
   Future<void> _initialize() async {
-    isar = await ref.read(isarProvider.future);
+    await IsarRepository.configure();
     await _registerShops();
     final shops = await getShops();
     state = shops;
-
-    // for (Shop shop in state) {
-    //   shopLocationList.add(shop.address);
-    // }
-    // debugPrint('shopLocationList: ${shopLocationList.toString()}');
   }
 
   /// 初期データの登録
@@ -43,7 +34,12 @@ class ShopNotifier extends StateNotifier<List<Shop>> {
       // jsonのパース
       final shops = <Shop>[];
       json.asMap().forEach((int i, dynamic e) {
-        shops.add(Shop(id: i + 1, name: e['name'], address: e['address']));
+        shops.add(Shop(
+            id: i + 1,
+            name: e['name'],
+            address: e['address'],
+            lat: e['lat'],
+            lng: e['lng']));
       });
 
       // 新規データの追加
@@ -56,16 +52,17 @@ class ShopNotifier extends StateNotifier<List<Shop>> {
   }
 
   Future<List<Shop>> getShops() async {
-    final shops = await isar.shops.where().findAll();
+    final shops = await IsarRepository.isar.shops.where().findAll();
     debugPrint('getShops: ${shops.length}, ${shops.toString()}');
     return shops;
   }
 
   Future<void> insertShop(Shop shop) async {
-    await isar.writeTxn(() => isar.shops.put(shop));
+    await IsarRepository.isar
+        .writeTxn(() => IsarRepository.isar.shops.put(shop));
     state = [...state, shop];
   }
 }
 
 final shopNotifierProvider =
-    StateNotifierProvider<ShopNotifier, List<Shop>>((ref) => ShopNotifier(ref));
+    StateNotifierProvider<ShopNotifier, List<Shop>>((ref) => ShopNotifier());

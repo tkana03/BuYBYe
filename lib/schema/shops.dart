@@ -8,13 +8,13 @@ class Shop {
     required this.id,
     required this.name,
     required this.address,
-    // required this.description,
+    required this.lat,
+    required this.lng,
   });
 
-  // Id id = Isar.autoIncrement;
   Id id;
   String name;
   String address;
-  String? description;
-  // todo: GPS用データ（緯度、経度）
+  double lat;
+  double lng;
 }
