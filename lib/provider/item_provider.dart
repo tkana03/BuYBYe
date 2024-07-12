@@ -17,6 +17,7 @@ class ItemNotifier extends StateNotifier<List<Item>> {
 
   Future<void> _initialize() async {
     isar = await ref.read(isarProvider.future);
+
     await _registerItems();
     state = await getItems();
   }
@@ -28,6 +29,8 @@ class ItemNotifier extends StateNotifier<List<Item>> {
       return;
     }
 
+    // この関数はIsarのデータベースがからの時のみ実行される
+    // そのため、ダミーデータを書き換えたい場合は、isarをブラウザで開いて、[item] の中身を全て削除
     try {
       final bytes = await rootBundle.load('assets/items.json');
       final jsonStr = const Utf8Decoder().convert(bytes.buffer.asUint8List());
@@ -36,7 +39,11 @@ class ItemNotifier extends StateNotifier<List<Item>> {
       // jsonのパース
       final items = <Item>[];
       json.asMap().forEach((int i, dynamic e) {
-        items.add(Item(id: i + 1, name: e['name']));
+        items.add(Item(
+          id: i + 1, 
+          name: e['name'],
+          // 期限: e['date'], ...
+        ));
       });
 
       // 新規データの追加

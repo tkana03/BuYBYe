@@ -45,5 +45,18 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Used to monitor location in the background and notify to app.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Used to monitor location in the background and notify to app.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Used to monitor location in the background and notify to app.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+    <string>fetch</string>
+    <string>location</string>
+	</array>
+
 </dict>
 </plist>

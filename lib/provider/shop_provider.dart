@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_application_1/main.dart';
 import 'package:flutter_application_1/provider/isar_provider.dart';
 import 'package:flutter_application_1/schema/shops.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,7 +19,13 @@ class ShopNotifier extends StateNotifier<List<Shop>> {
   Future<void> _initialize() async {
     isar = await ref.read(isarProvider.future);
     await _registerShops();
-    state = await getShops();
+    final shops = await getShops();
+    state = shops;
+
+    // for (Shop shop in state) {
+    //   shopLocationList.add(shop.address);
+    // }
+    // debugPrint('shopLocationList: ${shopLocationList.toString()}');
   }
 
   /// 初期データの登録
