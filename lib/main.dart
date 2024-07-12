@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/components/insert_dummy_data_button.dart';
+import 'package:flutter_application_1/provider/item_provider.dart';
 import 'package:flutter_application_1/provider/shop_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -46,6 +47,7 @@ class ShopList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final shops = ref.watch(shopNotifierProvider);
+    final items = ref.watch(itemNotifierProvider);
 
     return Column(children: [
       const ShopDummyInsertButton(),
@@ -69,6 +71,26 @@ class ShopList extends ConsumerWidget {
           ));
         },
       )),
+      const ItemDummyInsertButton(),
+      Expanded(
+          child: ListView.builder(
+              // data: (shops) => ListView.builder(
+              itemCount: items.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                    title: Row(
+                  children: [
+                    Image.network(
+                      'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl-2.jpg',
+                      height: 30,
+                      width: 30,
+                    ),
+                    const SizedBox(width: 16),
+                    // Text('アイテム３テスト'),
+                    Text(items[index].name),
+                  ],
+                ));
+              }))
     ]);
   }
 }
