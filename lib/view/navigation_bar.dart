@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/view/floating_button.dart';
+import 'package:flutter_application_1/view/item_list_screen/screen.dart';
 import 'package:flutter_application_1/view/main_screen/screen.dart';
-import 'package:flutter_application_1/view/read_receipt_screen/screen.dart';
+import 'package:flutter_application_1/view/read_receipt_screen/receipt_item.dart';
 import 'package:flutter_application_1/view/wish_list_item_screen/screen.dart';
+import 'package:flutter_application_1/view/read_receipt_screen/screen.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class NavigationWidget extends HookWidget {
@@ -12,7 +13,6 @@ class NavigationWidget extends HookWidget {
   Widget build(BuildContext context) {
     final currentPageIndex = useState(0);
 
-    final ThemeData theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         leading: Padding(
@@ -44,88 +44,32 @@ class NavigationWidget extends HookWidget {
             label: 'レシート登録',
           ),
           NavigationDestination(
-            // icon: Badge(
-            //   label: Text('2'),
-            //   child: Icon(Icons.messenger_sharp),
-            // ),
             icon: Icon(Icons.list_alt),
-            label: '商品一覧',
+            label: '在庫一覧',
           ),
+          // ![for debug] カメラ撮影後の遷移先（シミュレータでカメラを起動できないため、これをスキップしたもの）
+          // NavigationDestination(
+          //   icon: Icon(Icons.add),
+          //   label: '[dev]',
+          // ),
         ],
       ),
       body: <Widget>[
-        /// Home page
+        /// top page
         const MainScreen(),
 
-        /// Notifications page
+        /// wish list page
         const WishListItemScreen(),
-        // const Padding(
-        //   padding: EdgeInsets.all(8.0),
-        //   child: Column(
-        //     children: <Widget>[
-        //       Card(
-        //         child: ListTile(
-        //           leading: Icon(Icons.notifications_sharp),
-        //           title: Text('Notification 1'),
-        //           subtitle: Text('This is a notification'),
-        //         ),
-        //       ),
-        //       Card(
-        //         child: ListTile(
-        //           leading: Icon(Icons.notifications_sharp),
-        //           title: Text('Notification 2'),
-        //           subtitle: Text('This is a notification'),
-        //         ),
-        //       ),
-        //     ],
-        //   ),
-        // ),
 
+        /// read receipt page
         const ReadReceiptScreen(),
 
-        /// Messages page
-        ListView.builder(
-          reverse: true,
-          itemCount: 2,
-          itemBuilder: (BuildContext context, int index) {
-            if (index == 0) {
-              return Align(
-                alignment: Alignment.centerRight,
-                child: Container(
-                  margin: const EdgeInsets.only(top: 8.0),
-                  padding: const EdgeInsets.all(8.0),
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.primary,
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  child: Text(
-                    'Hello',
-                    style: theme.textTheme.bodyLarge!
-                        .copyWith(color: theme.colorScheme.onPrimary),
-                  ),
-                ),
-              );
-            }
-            return Align(
-              alignment: Alignment.centerLeft,
-              child: Container(
-                margin: const EdgeInsets.all(8.0),
-                padding: const EdgeInsets.all(8.0),
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.primary,
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                child: Text(
-                  'Hi!',
-                  style: theme.textTheme.bodyLarge!
-                      .copyWith(color: theme.colorScheme.onPrimary),
-                ),
-              ),
-            );
-          },
-        ),
+        // item list page
+        const ItemListScreen(),
+
+        // ![for debug] カメラ撮影後の遷移先（シミュレータでカメラを起動できないため、これをスキップしたもの）
+        // RegisterItemScreen(),
       ][currentPageIndex.value],
-      //floatingActionButton: const FloatingButton(),
     );
   }
 }

@@ -62,7 +62,7 @@ class MyApp extends StatelessWidget {
           tileColor: Color.fromARGB(255, 244, 244, 244),
         )
       ),
-      home: const NavigationWidget(),
+      home: const NavigationWidget()
     );
   }
 }

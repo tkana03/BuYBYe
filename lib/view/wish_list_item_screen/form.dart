@@ -23,18 +23,22 @@ class WishListItemForm extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final wishListItems = ref.watch(wishListItemNotifierProvider);
     final shops = ref.watch(shopNotifierProvider);
+    final focusNodeForItemNameField = FocusNode();
+    final focusNodeForShopField = FocusNode();
 
     return Column(
       children: <Widget>[
         const Padding(padding: EdgeInsets.symmetric(vertical: 16)),
         const Text("買いたい商品を登録",
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
         const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
-        ItemNameField(controller: _controller),
+        ItemNameField(
+            controller: _controller, focusNode: focusNodeForItemNameField),
         const Padding(
           padding: EdgeInsets.symmetric(vertical: 16),
         ),
-        DropdownButtonWidget(handleSelected: _handleSelected),
+        DropdownButtonWidget(
+            handleSelected: _handleSelected, focusNode: focusNodeForShopField),
         const Padding(
           padding: EdgeInsets.symmetric(vertical: 16),
         ),
@@ -48,6 +52,8 @@ class WishListItemForm extends HookConsumerWidget {
               textStyle:
                   const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
           onPressed: () async {
+            focusNodeForShopField.unfocus();
+            focusNodeForItemNameField.unfocus();
             if (_controller.text.isEmpty) {
               await showDialog<void>(
                   context: context,

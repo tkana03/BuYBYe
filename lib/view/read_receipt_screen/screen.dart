@@ -1,6 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/provider/camera_provider.dart';
+import 'package:flutter_application_1/view/read_receipt_screen/receipt_item.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 /// 写真撮影画面
@@ -45,6 +46,12 @@ class ReadReceiptScreen extends HookConsumerWidget {
           final image = await controller.takePicture();
           // path を出力
           debugPrint(image.path);
+
+          await Future.delayed(const Duration(seconds: 3));
+
+          // ignore: use_build_context_synchronously
+          await Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => RegisterItemScreen()));
         },
         child: const Icon(Icons.camera_alt),
       ),

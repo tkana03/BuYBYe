@@ -6,15 +6,8 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Container(
-          child: const Padding(
-            padding: EdgeInsets.all(16),
-            child: ShopList(),
-          ),
-        ),
-      ),
+    return const Scaffold(
+      body: ShopList(),
     );
   }
 }

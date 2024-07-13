@@ -3,8 +3,8 @@ import 'package:flutter_application_1/provider/item_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-class ShopList extends ConsumerWidget {
-  const ShopList({super.key});
+class ItemListScreen extends ConsumerWidget {
+  const ItemListScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -14,23 +14,16 @@ class ShopList extends ConsumerWidget {
     final dateFormat = DateFormat('M月d日');
 
     // 食料品と日用品のフィルタリング処理
-    final filteredFoodItems = items.where((item) {
-      final daysLeft = item.deadlineDatetime.difference(now).inDays;
-      return item.category == '食料品' && daysLeft <= 7;
-    }).toList()
+    final filteredFoodItems = items.toList()
       ..sort((a, b) => a.deadlineDatetime
-          .difference(now)
-          .inDays
-          .compareTo(b.deadlineDatetime.difference(now).inDays));
+          // .difference(now)
+          // .inDays
+          .compareTo(b.deadlineDatetime));
 
-    final filteredDailyItems = items.where((item) {
-      final daysLeft = item.deadlineDatetime.difference(now).inDays;
-      return item.category == '日用品' && daysLeft <= 14;
-    }).toList()
-      ..sort((a, b) => a.deadlineDatetime
-          .difference(now)
-          .inDays
-          .compareTo(b.deadlineDatetime.difference(now).inDays));
+    final filteredDailyItems = items.toList()..sort((a, b) => a.deadlineDatetime
+          // .difference(now)
+          // .inDays
+          .compareTo(b.deadlineDatetime));
 
     // 両方のリストを一つのListViewで表示
     final combinedList = <Widget>[
@@ -110,20 +103,26 @@ class ShopList extends ConsumerWidget {
                               child: Row(
                                 children: [
                                   const Icon(Icons.watch_later, size: 16),
-                                  const Text(
-                                    ' あと',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                    ),
-                                  ),
                                   Text(
-                                    '$daysLeft日',
-                                    style: const TextStyle(
+                                    ' ${dateFormat.format(item.deadlineDatetime)}',
+                                    style:const TextStyle(
                                       fontSize: 15,
-                                      color: Colors.red,
-                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
+                                  // const Text(
+                                  //   ' あと',
+                                  //   style: TextStyle(
+                                  //     fontSize: 12,
+                                  //   ),
+                                  // ),
+                                  // Text(
+                                  //   '$daysLeft日',
+                                  //   style: const TextStyle(
+                                  //     fontSize: 15,
+                                  //     color: Colors.red,
+                                  //     fontWeight: FontWeight.bold,
+                                  //   ),
+                                  // ),
                                 ],
                               ),
                             ),
@@ -188,20 +187,26 @@ class ShopList extends ConsumerWidget {
                               child: Row(
                                 children: [
                                   const Icon(Icons.watch_later, size: 16),
-                                  const Text(
-                                    ' あと',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                    ),
-                                  ),
                                   Text(
-                                    '$daysLeft日',
-                                    style: const TextStyle(
+                                    ' ${dateFormat.format(item.deadlineDatetime)}',
+                                    style:const TextStyle(
                                       fontSize: 15,
-                                      color: Colors.red,
-                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
+                                  // const Text(
+                                  //   ' あと',
+                                  //   style: TextStyle(
+                                  //     fontSize: 12,
+                                  //   ),
+                                  // ),
+                                  // Text(
+                                  //   '$daysLeft日',
+                                  //   style: const TextStyle(
+                                  //     fontSize: 15,
+                                  //     color: Colors.red,
+                                  //     fontWeight: FontWeight.bold,
+                                  //   ),
+                                  // ),
                                 ],
                               ),
                             ),
