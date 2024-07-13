@@ -13,6 +13,7 @@ class ShopDummyInsertButton extends ConsumerWidget {
     final newShop = Shop(
       id: Isar.autoIncrement,
       name: 'Shop x',
+      longName: 'Shop x (Long Name)',
       address: 'Address x',
       lat: 0,
       lng: 0,

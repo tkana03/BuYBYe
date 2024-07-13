@@ -13,7 +13,10 @@ class NavigationWidget extends HookWidget {
     final ThemeData theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        // leading: IconButton(
+        //   icon: Image.asset("assets/logo.png"),
+        // ),
+        // backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: const Text("Shop App（仮）"),
         // actions: const [
         //   Icon(Icons.add),

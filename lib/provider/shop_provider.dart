@@ -37,6 +37,7 @@ class ShopNotifier extends StateNotifier<List<Shop>> {
         shops.add(Shop(
             id: i + 1,
             name: e['name'],
+            longName: e['longName'],
             address: e['address'],
             lat: e['lat'],
             lng: e['lng']));

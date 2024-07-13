@@ -7,6 +7,7 @@ class Shop {
   Shop({
     required this.id,
     required this.name,
+    required this.longName,
     required this.address,
     required this.lat,
     required this.lng,
@@ -14,6 +15,7 @@ class Shop {
 
   Id id;
   String name;
+  String longName;
   String address;
   double lat;
   double lng;

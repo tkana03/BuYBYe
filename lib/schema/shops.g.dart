@@ -32,8 +32,13 @@ const ShopSchema = CollectionSchema(
       name: r'lng',
       type: IsarType.double,
     ),
-    r'name': PropertySchema(
+    r'longName': PropertySchema(
       id: 3,
+      name: r'longName',
+      type: IsarType.string,
+    ),
+    r'name': PropertySchema(
+      id: 4,
       name: r'name',
       type: IsarType.string,
     )
@@ -59,6 +64,7 @@ int _shopEstimateSize(
 ) {
   var bytesCount = offsets.last;
   bytesCount += 3 + object.address.length * 3;
+  bytesCount += 3 + object.longName.length * 3;
   bytesCount += 3 + object.name.length * 3;
   return bytesCount;
 }
@@ -72,7 +78,8 @@ void _shopSerialize(
   writer.writeString(offsets[0], object.address);
   writer.writeDouble(offsets[1], object.lat);
   writer.writeDouble(offsets[2], object.lng);
-  writer.writeString(offsets[3], object.name);
+  writer.writeString(offsets[3], object.longName);
+  writer.writeString(offsets[4], object.name);
 }
 
 Shop _shopDeserialize(
@@ -86,7 +93,8 @@ Shop _shopDeserialize(
     id: id,
     lat: reader.readDouble(offsets[1]),
     lng: reader.readDouble(offsets[2]),
-    name: reader.readString(offsets[3]),
+    longName: reader.readString(offsets[3]),
+    name: reader.readString(offsets[4]),
   );
   return object;
 }
@@ -105,6 +113,8 @@ P _shopDeserializeProp<P>(
     case 2:
       return (reader.readDouble(offset)) as P;
     case 3:
+      return (reader.readString(offset)) as P;
+    case 4:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -503,6 +513,135 @@ extension ShopQueryFilter on QueryBuilder<Shop, Shop, QFilterCondition> {
     });
   }
 
+  QueryBuilder<Shop, Shop, QAfterFilterCondition> longNameEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'longName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Shop, Shop, QAfterFilterCondition> longNameGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'longName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Shop, Shop, QAfterFilterCondition> longNameLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'longName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Shop, Shop, QAfterFilterCondition> longNameBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'longName',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Shop, Shop, QAfterFilterCondition> longNameStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'longName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Shop, Shop, QAfterFilterCondition> longNameEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'longName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Shop, Shop, QAfterFilterCondition> longNameContains(String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'longName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Shop, Shop, QAfterFilterCondition> longNameMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'longName',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Shop, Shop, QAfterFilterCondition> longNameIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'longName',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Shop, Shop, QAfterFilterCondition> longNameIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'longName',
+        value: '',
+      ));
+    });
+  }
+
   QueryBuilder<Shop, Shop, QAfterFilterCondition> nameEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -673,6 +812,18 @@ extension ShopQuerySortBy on QueryBuilder<Shop, Shop, QSortBy> {
     });
   }
 
+  QueryBuilder<Shop, Shop, QAfterSortBy> sortByLongName() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'longName', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Shop, Shop, QAfterSortBy> sortByLongNameDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'longName', Sort.desc);
+    });
+  }
+
   QueryBuilder<Shop, Shop, QAfterSortBy> sortByName() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.asc);
@@ -735,6 +886,18 @@ extension ShopQuerySortThenBy on QueryBuilder<Shop, Shop, QSortThenBy> {
     });
   }
 
+  QueryBuilder<Shop, Shop, QAfterSortBy> thenByLongName() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'longName', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Shop, Shop, QAfterSortBy> thenByLongNameDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'longName', Sort.desc);
+    });
+  }
+
   QueryBuilder<Shop, Shop, QAfterSortBy> thenByName() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.asc);
@@ -768,6 +931,13 @@ extension ShopQueryWhereDistinct on QueryBuilder<Shop, Shop, QDistinct> {
     });
   }
 
+  QueryBuilder<Shop, Shop, QDistinct> distinctByLongName(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'longName', caseSensitive: caseSensitive);
+    });
+  }
+
   QueryBuilder<Shop, Shop, QDistinct> distinctByName(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -798,6 +968,12 @@ extension ShopQueryProperty on QueryBuilder<Shop, Shop, QQueryProperty> {
   QueryBuilder<Shop, double, QQueryOperations> lngProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'lng');
+    });
+  }
+
+  QueryBuilder<Shop, String, QQueryOperations> longNameProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'longName');
     });
   }
 
