@@ -9,7 +9,14 @@ class IsarRepository {
 
   static Isar get isar => _isar!;
   static Isar? _isar;
+
+  static bool isInitializeInProgress = false;
   static Future<void> configure() async {
+    if (!isInitializeInProgress) {
+      isInitializeInProgress = true;
+      await waitForInitialize();
+      isInitializeInProgress = false;
+    }
     if (_isar != null) {
       return;
     }
@@ -17,5 +24,11 @@ class IsarRepository {
     final dir = await getApplicationDocumentsDirectory();
     _isar = await Isar.open([ItemSchema, ShopSchema, WishListItemSchema],
         directory: dir.path, inspector: true);
+  }
+
+  static Future<void> waitForInitialize() async {
+    while (!isInitializeInProgress) {
+      await Future.delayed(const Duration(milliseconds: 500));
+    }
   }
 }
