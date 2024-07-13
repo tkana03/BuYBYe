@@ -43,11 +43,11 @@ class ItemNotifier extends StateNotifier<List<Item>> {
           category: e['category']
         ));
       });
-
+      
       // 新規データの追加
       for (Item item in items) {
         insertItem(item);
-        print(item.name);
+        //print(item.name);
       }
     } catch (e) {
       debugPrint(e.toString());

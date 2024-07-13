@@ -27,23 +27,33 @@ const ItemSchema = CollectionSchema(
       name: r'deadline',
       type: IsarType.string,
     ),
-    r'description': PropertySchema(
+    r'deadlineDatetime': PropertySchema(
       id: 2,
+      name: r'deadlineDatetime',
+      type: IsarType.dateTime,
+    ),
+    r'description': PropertySchema(
+      id: 3,
       name: r'description',
       type: IsarType.string,
     ),
     r'name': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'name',
       type: IsarType.string,
     ),
     r'purchaseDate': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'purchaseDate',
       type: IsarType.string,
     ),
+    r'purchaseDatetime': PropertySchema(
+      id: 6,
+      name: r'purchaseDatetime',
+      type: IsarType.dateTime,
+    ),
     r'state': PropertySchema(
-      id: 5,
+      id: 7,
       name: r'state',
       type: IsarType.string,
     )
@@ -90,10 +100,12 @@ void _itemSerialize(
 ) {
   writer.writeString(offsets[0], object.category);
   writer.writeString(offsets[1], object.deadline);
-  writer.writeString(offsets[2], object.description);
-  writer.writeString(offsets[3], object.name);
-  writer.writeString(offsets[4], object.purchaseDate);
-  writer.writeString(offsets[5], object.state);
+  writer.writeDateTime(offsets[2], object.deadlineDatetime);
+  writer.writeString(offsets[3], object.description);
+  writer.writeString(offsets[4], object.name);
+  writer.writeString(offsets[5], object.purchaseDate);
+  writer.writeDateTime(offsets[6], object.purchaseDatetime);
+  writer.writeString(offsets[7], object.state);
 }
 
 Item _itemDeserialize(
@@ -106,11 +118,11 @@ Item _itemDeserialize(
     category: reader.readString(offsets[0]),
     deadline: reader.readString(offsets[1]),
     id: id,
-    name: reader.readString(offsets[3]),
-    purchaseDate: reader.readString(offsets[4]),
-    state: reader.readString(offsets[5]),
+    name: reader.readString(offsets[4]),
+    purchaseDate: reader.readString(offsets[5]),
+    state: reader.readString(offsets[7]),
   );
-  object.description = reader.readStringOrNull(offsets[2]);
+  object.description = reader.readStringOrNull(offsets[3]);
   return object;
 }
 
@@ -126,12 +138,16 @@ P _itemDeserializeProp<P>(
     case 1:
       return (reader.readString(offset)) as P;
     case 2:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readDateTime(offset)) as P;
     case 3:
-      return (reader.readString(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 4:
       return (reader.readString(offset)) as P;
     case 5:
+      return (reader.readString(offset)) as P;
+    case 6:
+      return (reader.readDateTime(offset)) as P;
+    case 7:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -480,6 +496,59 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'deadline',
         value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Item, Item, QAfterFilterCondition> deadlineDatetimeEqualTo(
+      DateTime value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'deadlineDatetime',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Item, Item, QAfterFilterCondition> deadlineDatetimeGreaterThan(
+    DateTime value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'deadlineDatetime',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Item, Item, QAfterFilterCondition> deadlineDatetimeLessThan(
+    DateTime value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'deadlineDatetime',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Item, Item, QAfterFilterCondition> deadlineDatetimeBetween(
+    DateTime lower,
+    DateTime upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'deadlineDatetime',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
       ));
     });
   }
@@ -940,6 +1009,59 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
+  QueryBuilder<Item, Item, QAfterFilterCondition> purchaseDatetimeEqualTo(
+      DateTime value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'purchaseDatetime',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Item, Item, QAfterFilterCondition> purchaseDatetimeGreaterThan(
+    DateTime value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'purchaseDatetime',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Item, Item, QAfterFilterCondition> purchaseDatetimeLessThan(
+    DateTime value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'purchaseDatetime',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Item, Item, QAfterFilterCondition> purchaseDatetimeBetween(
+    DateTime lower,
+    DateTime upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'purchaseDatetime',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
   QueryBuilder<Item, Item, QAfterFilterCondition> stateEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -1098,6 +1220,18 @@ extension ItemQuerySortBy on QueryBuilder<Item, Item, QSortBy> {
     });
   }
 
+  QueryBuilder<Item, Item, QAfterSortBy> sortByDeadlineDatetime() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'deadlineDatetime', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Item, Item, QAfterSortBy> sortByDeadlineDatetimeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'deadlineDatetime', Sort.desc);
+    });
+  }
+
   QueryBuilder<Item, Item, QAfterSortBy> sortByDescription() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'description', Sort.asc);
@@ -1131,6 +1265,18 @@ extension ItemQuerySortBy on QueryBuilder<Item, Item, QSortBy> {
   QueryBuilder<Item, Item, QAfterSortBy> sortByPurchaseDateDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'purchaseDate', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Item, Item, QAfterSortBy> sortByPurchaseDatetime() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'purchaseDatetime', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Item, Item, QAfterSortBy> sortByPurchaseDatetimeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'purchaseDatetime', Sort.desc);
     });
   }
 
@@ -1169,6 +1315,18 @@ extension ItemQuerySortThenBy on QueryBuilder<Item, Item, QSortThenBy> {
   QueryBuilder<Item, Item, QAfterSortBy> thenByDeadlineDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'deadline', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Item, Item, QAfterSortBy> thenByDeadlineDatetime() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'deadlineDatetime', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Item, Item, QAfterSortBy> thenByDeadlineDatetimeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'deadlineDatetime', Sort.desc);
     });
   }
 
@@ -1220,6 +1378,18 @@ extension ItemQuerySortThenBy on QueryBuilder<Item, Item, QSortThenBy> {
     });
   }
 
+  QueryBuilder<Item, Item, QAfterSortBy> thenByPurchaseDatetime() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'purchaseDatetime', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Item, Item, QAfterSortBy> thenByPurchaseDatetimeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'purchaseDatetime', Sort.desc);
+    });
+  }
+
   QueryBuilder<Item, Item, QAfterSortBy> thenByState() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'state', Sort.asc);
@@ -1248,6 +1418,12 @@ extension ItemQueryWhereDistinct on QueryBuilder<Item, Item, QDistinct> {
     });
   }
 
+  QueryBuilder<Item, Item, QDistinct> distinctByDeadlineDatetime() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'deadlineDatetime');
+    });
+  }
+
   QueryBuilder<Item, Item, QDistinct> distinctByDescription(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -1266,6 +1442,12 @@ extension ItemQueryWhereDistinct on QueryBuilder<Item, Item, QDistinct> {
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'purchaseDate', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<Item, Item, QDistinct> distinctByPurchaseDatetime() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'purchaseDatetime');
     });
   }
 
@@ -1296,6 +1478,12 @@ extension ItemQueryProperty on QueryBuilder<Item, Item, QQueryProperty> {
     });
   }
 
+  QueryBuilder<Item, DateTime, QQueryOperations> deadlineDatetimeProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'deadlineDatetime');
+    });
+  }
+
   QueryBuilder<Item, String?, QQueryOperations> descriptionProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'description');
@@ -1311,6 +1499,12 @@ extension ItemQueryProperty on QueryBuilder<Item, Item, QQueryProperty> {
   QueryBuilder<Item, String, QQueryOperations> purchaseDateProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'purchaseDate');
+    });
+  }
+
+  QueryBuilder<Item, DateTime, QQueryOperations> purchaseDatetimeProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'purchaseDatetime');
     });
   }
 

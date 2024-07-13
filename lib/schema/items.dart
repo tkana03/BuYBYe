@@ -16,6 +16,9 @@ class Item {
     // required this.description,
   });
 
+  // todo: DateTimeもDBに保存するなら、コンストラクタで処理する
+  // 保存しておくと items.where() で日付の条件指定ができるようになるから、やった方がいいかもしれない
+
   // Id id = Isar.autoIncrement;
   Id id;
   String name;
@@ -27,6 +30,9 @@ class Item {
   String category;
   // Date... 期限;
   String? description;
+
+  DateTime get purchaseDatetime => DateTime.parse(purchaseDate);
+  DateTime get deadlineDatetime => DateTime.parse(deadline);
 }
 
 

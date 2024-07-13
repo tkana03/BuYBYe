@@ -22,7 +22,7 @@
     },
     {
         "name": "日焼け止め",
-        "satte": "常温",
+        "state": "常温",
         "purchaseDate": "2024-05-15",
         "deadline": "2024-07-15",
         "category": "日用品"
