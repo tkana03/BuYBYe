@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/background_util.dart' as background_util;
+import 'package:flutter_application_1/model/isar_repository.dart';
 import 'package:flutter_application_1/view/navigation_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:isar/isar.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // DB
+  await Isar.getInstance()?.close(deleteFromDisk: true);
+  await IsarRepository.configure();
+  
   // GPS
   background_util.setupGpsBackgroundTask();
   // ローカル通知

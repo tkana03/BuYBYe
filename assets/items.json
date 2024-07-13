@@ -1,15 +1,30 @@
 [
     {
-        "name": "Item 1",
-        "期限": "2022-12-31"
+        "name": "豚肉",
+        "state": "冷蔵",
+        "purchaseDate": "2024-07-13",
+        "deadline": "2024-07-15",
+        "category": "食料品"
     },
     {
-        "name": "Item 2"
+        "name": "玉ねぎ",
+        "state": "冷蔵",
+        "purchaseDate": "2024-07-10",
+        "deadline": "2024-08-10",
+        "category": "食料品"
     },
     {
-        "name": "Item 3"
+        "name": "歯磨き粉",
+        "state": "常温",
+        "purchaseDate": "2024-04-25",
+        "deadline": "2024-07-25",
+        "category": "日用品"
     },
     {
-
+        "name": "日焼け止め",
+        "state": "常温",
+        "purchaseDate": "2024-05-15",
+        "deadline": "2024-07-15",
+        "category": "日用品"
     }
 ]

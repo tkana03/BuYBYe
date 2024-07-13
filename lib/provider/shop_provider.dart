@@ -13,7 +13,6 @@ class ShopNotifier extends StateNotifier<List<Shop>> {
   }
 
   Future<void> _initialize() async {
-    await IsarRepository.configure();
     await _registerShops();
     final shops = await getShops();
     state = shops;

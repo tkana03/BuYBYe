@@ -10,7 +10,6 @@ class WishListItemNotifier extends StateNotifier<List<WishListItem>> {
   }
 
   Future<void> _initialize() async {
-    await IsarRepository.configure();
     state = await getWishListItems();
   }
 
