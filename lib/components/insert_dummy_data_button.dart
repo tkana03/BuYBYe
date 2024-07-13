@@ -37,6 +37,10 @@ class ItemDummyInsertButton extends ConsumerWidget {
     final newItem = Item(
       id: Isar.autoIncrement,
       name: 'Item x',
+      state: 'State x',
+      purchaseDate: '2022-01-01',
+      deadline: '2022-01-01',
+      category: 'Category x',
     );
     await ref.watch(itemNotifierProvider.notifier).insertItem(newItem);
   }

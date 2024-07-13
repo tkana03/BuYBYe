@@ -7,6 +7,11 @@ class Item {
   Item({
     required this.id,
     required this.name,
+    required this.state,
+    required this.purchaseDate,
+    required this.deadline,
+    required this.category,
+
     // required this.期限...
     // required this.description,
   });
@@ -14,6 +19,12 @@ class Item {
   // Id id = Isar.autoIncrement;
   Id id;
   String name;
+  String state;
+  String purchaseDate;
+  //DateTime型にする？
+  //Datetime(2020, 10, 2, 12, 10)
+  String deadline;
+  String category;
   // Date... 期限;
   String? description;
 }

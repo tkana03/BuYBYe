@@ -13,7 +13,6 @@ class ItemNotifier extends StateNotifier<List<Item>> {
   }
 
   Future<void> _initialize() async {
-    await IsarRepository.configure();
     await _registerItems();
     state = await getItems();
   }
@@ -38,13 +37,17 @@ class ItemNotifier extends StateNotifier<List<Item>> {
         items.add(Item(
           id: i + 1,
           name: e['name'],
-          // 期限: e['date'], ...
+          state: e['state'],
+          purchaseDate: e['purchaseDate'],
+          deadline: e['deadline'],
+          category: e['category']
         ));
       });
 
       // 新規データの追加
       for (Item item in items) {
         insertItem(item);
+        print(item.name);
       }
     } catch (e) {
       debugPrint(e.toString());

@@ -11,6 +11,7 @@ class ShopList extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final shops = ref.watch(shopNotifierProvider);
     final items = ref.watch(itemNotifierProvider);
+    print(items);
 
     return Column(
       children: [
