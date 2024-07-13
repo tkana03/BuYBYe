@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/view/floating_button.dart';
 import 'package:flutter_application_1/view/main_screen/screen.dart';
 import 'package:flutter_application_1/view/wish_list_item_screen/screen.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -13,22 +14,15 @@ class NavigationWidget extends HookWidget {
     final ThemeData theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        
         leading: Padding(
           padding: const EdgeInsets.only(left: 15.0),
-          child:
-          Image.asset("assets/logo/logo.png"),
-
+          child: Image.asset("assets/logo/logo.png"),
         ),
-          title:
-          SizedBox(height : 45, child:
-            
-          
-          Image.asset("assets/logo_text/logo_text_v1.png"),
-          ),
+        title: SizedBox(
+          height: 45,
+          child: Image.asset("assets/logo_text/logo_text_v1.png"),
+        ),
       ),
-    
-
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (int index) {
           currentPageIndex.value = index;
@@ -124,12 +118,7 @@ class NavigationWidget extends HookWidget {
           },
         ),
       ][currentPageIndex.value],
-      // floatingActionButton: FloatingActionButton(
-      //   // onPressed: _incrementCounter,
-      //   onPressed: () => {debugPrint('hello')},
-      //   tooltip: 'Increment',
-      //   child: const Icon(Icons.add),
-      // ), // This trailing comma makes auto-formatting nicer for build methods.
+      floatingActionButton: const FloatingButton(),
     );
   }
 }

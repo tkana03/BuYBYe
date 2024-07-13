@@ -18,12 +18,9 @@ void setupGpsBackgroundTask() async {
 
 @pragma('vm:entry-point')
 void backgroundHandler(Location data) {
-  debugPrint('backgroundHandler: ${DateTime.now()}, $data');
-
   Future(() async {
-    await IsarRepository.configure();
+    debugPrint('backgroundHandler: ${DateTime.now()}, $data');
     final shops = await IsarRepository.isar.shops.where().findAll();
-    debugPrint('shops: ${shops.length}, ...');
 
     for (var shop in shops) {
       final shopLocation = ShopLocation(shop);

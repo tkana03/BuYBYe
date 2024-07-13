@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/background_util.dart' as background_util;
 import 'package:flutter_application_1/model/isar_repository.dart';
@@ -9,9 +10,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // DB
-  await Isar.getInstance()?.close(deleteFromDisk: true);
   await IsarRepository.configure();
-  
+
   // GPS
   background_util.setupGpsBackgroundTask();
   // ローカル通知
@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Shop App（仮）',
+      title: 'bUybyE',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
         useMaterial3: true,

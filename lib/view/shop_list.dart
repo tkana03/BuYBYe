@@ -1,4 +1,4 @@
-import 'dart:io';
+// import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/components/insert_dummy_data_button.dart';
@@ -22,13 +22,19 @@ class ShopList extends ConsumerWidget {
       final daysLeft = item.deadlineDatetime.difference(now).inDays;
       return item.category == '食料品' && daysLeft <= 7;
     }).toList()
-      ..sort((a, b) => a.deadlineDatetime.difference(now).inDays.compareTo(b.deadlineDatetime.difference(now).inDays));
+      ..sort((a, b) => a.deadlineDatetime
+          .difference(now)
+          .inDays
+          .compareTo(b.deadlineDatetime.difference(now).inDays));
 
     final filteredDailyItems = items.where((item) {
       final daysLeft = item.deadlineDatetime.difference(now).inDays;
       return item.category == '日用品' && daysLeft <= 14;
     }).toList()
-      ..sort((a, b) => a.deadlineDatetime.difference(now).inDays.compareTo(b.deadlineDatetime.difference(now).inDays));
+      ..sort((a, b) => a.deadlineDatetime
+          .difference(now)
+          .inDays
+          .compareTo(b.deadlineDatetime.difference(now).inDays));
 
     return Column(
       children: [
