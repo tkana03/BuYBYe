@@ -22,13 +22,23 @@ const ShopSchema = CollectionSchema(
       name: r'address',
       type: IsarType.string,
     ),
-    r'description': PropertySchema(
+    r'lat': PropertySchema(
       id: 1,
-      name: r'description',
+      name: r'lat',
+      type: IsarType.double,
+    ),
+    r'lng': PropertySchema(
+      id: 2,
+      name: r'lng',
+      type: IsarType.double,
+    ),
+    r'longName': PropertySchema(
+      id: 3,
+      name: r'longName',
       type: IsarType.string,
     ),
     r'name': PropertySchema(
-      id: 2,
+      id: 4,
       name: r'name',
       type: IsarType.string,
     )
@@ -54,12 +64,7 @@ int _shopEstimateSize(
 ) {
   var bytesCount = offsets.last;
   bytesCount += 3 + object.address.length * 3;
-  {
-    final value = object.description;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
+  bytesCount += 3 + object.longName.length * 3;
   bytesCount += 3 + object.name.length * 3;
   return bytesCount;
 }
@@ -71,8 +76,10 @@ void _shopSerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeString(offsets[0], object.address);
-  writer.writeString(offsets[1], object.description);
-  writer.writeString(offsets[2], object.name);
+  writer.writeDouble(offsets[1], object.lat);
+  writer.writeDouble(offsets[2], object.lng);
+  writer.writeString(offsets[3], object.longName);
+  writer.writeString(offsets[4], object.name);
 }
 
 Shop _shopDeserialize(
@@ -84,9 +91,11 @@ Shop _shopDeserialize(
   final object = Shop(
     address: reader.readString(offsets[0]),
     id: id,
-    name: reader.readString(offsets[2]),
+    lat: reader.readDouble(offsets[1]),
+    lng: reader.readDouble(offsets[2]),
+    longName: reader.readString(offsets[3]),
+    name: reader.readString(offsets[4]),
   );
-  object.description = reader.readStringOrNull(offsets[1]);
   return object;
 }
 
@@ -100,8 +109,12 @@ P _shopDeserializeProp<P>(
     case 0:
       return (reader.readString(offset)) as P;
     case 1:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readDouble(offset)) as P;
     case 2:
+      return (reader.readDouble(offset)) as P;
+    case 3:
+      return (reader.readString(offset)) as P;
+    case 4:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -324,152 +337,6 @@ extension ShopQueryFilter on QueryBuilder<Shop, Shop, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Shop, Shop, QAfterFilterCondition> descriptionIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'description',
-      ));
-    });
-  }
-
-  QueryBuilder<Shop, Shop, QAfterFilterCondition> descriptionIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'description',
-      ));
-    });
-  }
-
-  QueryBuilder<Shop, Shop, QAfterFilterCondition> descriptionEqualTo(
-    String? value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'description',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Shop, Shop, QAfterFilterCondition> descriptionGreaterThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'description',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Shop, Shop, QAfterFilterCondition> descriptionLessThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'description',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Shop, Shop, QAfterFilterCondition> descriptionBetween(
-    String? lower,
-    String? upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'description',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Shop, Shop, QAfterFilterCondition> descriptionStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'description',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Shop, Shop, QAfterFilterCondition> descriptionEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'description',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Shop, Shop, QAfterFilterCondition> descriptionContains(
-      String value,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'description',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Shop, Shop, QAfterFilterCondition> descriptionMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'description',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Shop, Shop, QAfterFilterCondition> descriptionIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'description',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<Shop, Shop, QAfterFilterCondition> descriptionIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'description',
-        value: '',
-      ));
-    });
-  }
-
   QueryBuilder<Shop, Shop, QAfterFilterCondition> idEqualTo(Id value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -518,6 +385,259 @@ extension ShopQueryFilter on QueryBuilder<Shop, Shop, QFilterCondition> {
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<Shop, Shop, QAfterFilterCondition> latEqualTo(
+    double value, {
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'lat',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<Shop, Shop, QAfterFilterCondition> latGreaterThan(
+    double value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'lat',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<Shop, Shop, QAfterFilterCondition> latLessThan(
+    double value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'lat',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<Shop, Shop, QAfterFilterCondition> latBetween(
+    double lower,
+    double upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'lat',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<Shop, Shop, QAfterFilterCondition> lngEqualTo(
+    double value, {
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'lng',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<Shop, Shop, QAfterFilterCondition> lngGreaterThan(
+    double value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'lng',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<Shop, Shop, QAfterFilterCondition> lngLessThan(
+    double value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'lng',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<Shop, Shop, QAfterFilterCondition> lngBetween(
+    double lower,
+    double upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'lng',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<Shop, Shop, QAfterFilterCondition> longNameEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'longName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Shop, Shop, QAfterFilterCondition> longNameGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'longName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Shop, Shop, QAfterFilterCondition> longNameLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'longName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Shop, Shop, QAfterFilterCondition> longNameBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'longName',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Shop, Shop, QAfterFilterCondition> longNameStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'longName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Shop, Shop, QAfterFilterCondition> longNameEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'longName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Shop, Shop, QAfterFilterCondition> longNameContains(String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'longName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Shop, Shop, QAfterFilterCondition> longNameMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'longName',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Shop, Shop, QAfterFilterCondition> longNameIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'longName',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Shop, Shop, QAfterFilterCondition> longNameIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'longName',
+        value: '',
       ));
     });
   }
@@ -668,15 +788,39 @@ extension ShopQuerySortBy on QueryBuilder<Shop, Shop, QSortBy> {
     });
   }
 
-  QueryBuilder<Shop, Shop, QAfterSortBy> sortByDescription() {
+  QueryBuilder<Shop, Shop, QAfterSortBy> sortByLat() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'description', Sort.asc);
+      return query.addSortBy(r'lat', Sort.asc);
     });
   }
 
-  QueryBuilder<Shop, Shop, QAfterSortBy> sortByDescriptionDesc() {
+  QueryBuilder<Shop, Shop, QAfterSortBy> sortByLatDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'description', Sort.desc);
+      return query.addSortBy(r'lat', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Shop, Shop, QAfterSortBy> sortByLng() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lng', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Shop, Shop, QAfterSortBy> sortByLngDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lng', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Shop, Shop, QAfterSortBy> sortByLongName() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'longName', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Shop, Shop, QAfterSortBy> sortByLongNameDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'longName', Sort.desc);
     });
   }
 
@@ -706,18 +850,6 @@ extension ShopQuerySortThenBy on QueryBuilder<Shop, Shop, QSortThenBy> {
     });
   }
 
-  QueryBuilder<Shop, Shop, QAfterSortBy> thenByDescription() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'description', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Shop, Shop, QAfterSortBy> thenByDescriptionDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'description', Sort.desc);
-    });
-  }
-
   QueryBuilder<Shop, Shop, QAfterSortBy> thenById() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.asc);
@@ -727,6 +859,42 @@ extension ShopQuerySortThenBy on QueryBuilder<Shop, Shop, QSortThenBy> {
   QueryBuilder<Shop, Shop, QAfterSortBy> thenByIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Shop, Shop, QAfterSortBy> thenByLat() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lat', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Shop, Shop, QAfterSortBy> thenByLatDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lat', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Shop, Shop, QAfterSortBy> thenByLng() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lng', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Shop, Shop, QAfterSortBy> thenByLngDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lng', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Shop, Shop, QAfterSortBy> thenByLongName() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'longName', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Shop, Shop, QAfterSortBy> thenByLongNameDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'longName', Sort.desc);
     });
   }
 
@@ -751,10 +919,22 @@ extension ShopQueryWhereDistinct on QueryBuilder<Shop, Shop, QDistinct> {
     });
   }
 
-  QueryBuilder<Shop, Shop, QDistinct> distinctByDescription(
+  QueryBuilder<Shop, Shop, QDistinct> distinctByLat() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'lat');
+    });
+  }
+
+  QueryBuilder<Shop, Shop, QDistinct> distinctByLng() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'lng');
+    });
+  }
+
+  QueryBuilder<Shop, Shop, QDistinct> distinctByLongName(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'description', caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'longName', caseSensitive: caseSensitive);
     });
   }
 
@@ -779,9 +959,21 @@ extension ShopQueryProperty on QueryBuilder<Shop, Shop, QQueryProperty> {
     });
   }
 
-  QueryBuilder<Shop, String?, QQueryOperations> descriptionProperty() {
+  QueryBuilder<Shop, double, QQueryOperations> latProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'description');
+      return query.addPropertyName(r'lat');
+    });
+  }
+
+  QueryBuilder<Shop, double, QQueryOperations> lngProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'lng');
+    });
+  }
+
+  QueryBuilder<Shop, String, QQueryOperations> longNameProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'longName');
     });
   }
 
