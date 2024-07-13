@@ -41,6 +41,7 @@ class ItemDummyInsertButton extends ConsumerWidget {
       purchaseDate: '2022-01-01',
       deadline: '2022-01-01',
       category: 'Category x',
+      image: "",
     );
     await ref.watch(itemNotifierProvider.notifier).insertItem(newItem);
   }

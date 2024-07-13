@@ -10,7 +10,7 @@ class MainScreen extends StatelessWidget {
       body: Center(
         child: Container(
           child: const Padding(
-            padding: EdgeInsets.all(32),
+            padding: EdgeInsets.all(16),
             child: ShopList(),
           ),
         ),

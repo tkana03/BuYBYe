@@ -11,9 +11,7 @@ class Item {
     required this.purchaseDate,
     required this.deadline,
     required this.category,
-
-    // required this.期限...
-    // required this.description,
+    required this.image,
   });
 
   // todo: DateTimeもDBに保存するなら、コンストラクタで処理する
@@ -28,8 +26,7 @@ class Item {
   //Datetime(2020, 10, 2, 12, 10)
   String deadline;
   String category;
-  // Date... 期限;
-  String? description;
+  String image;
 
   DateTime get purchaseDatetime => DateTime.parse(purchaseDate);
   DateTime get deadlineDatetime => DateTime.parse(deadline);

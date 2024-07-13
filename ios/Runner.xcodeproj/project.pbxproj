@@ -470,7 +470,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
-				DEVELOPMENT_TEAM = M276AH5QJD;
+				DEVELOPMENT_TEAM = D6LQW2A4AZ;
 				ENABLE_BITCODE = NO;
 				ENABLE_ONLY_ACTIVE_RESOURCES = YES;
 				INFOPLIST_FILE = Runner/Info.plist;
@@ -480,7 +480,7 @@
 					"@executable_path/Frameworks",
 				);
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.flutterApplication2x;
+				PRODUCT_BUNDLE_IDENTIFIER = abcaaacom.example.flutterApplication2x;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_TEXT_BASED_API = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
@@ -657,7 +657,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
-				DEVELOPMENT_TEAM = M276AH5QJD;
+				DEVELOPMENT_TEAM = D6LQW2A4AZ;
 				ENABLE_BITCODE = NO;
 				ENABLE_ONLY_ACTIVE_RESOURCES = YES;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
@@ -668,7 +668,7 @@
 					"@executable_path/Frameworks",
 				);
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.flutterApplication2x;
+				PRODUCT_BUNDLE_IDENTIFIER = abcaaacom.example.flutterApplication2x;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_TEXT_BASED_API = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
@@ -685,7 +685,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
-				DEVELOPMENT_TEAM = M276AH5QJD;
+				DEVELOPMENT_TEAM = D6LQW2A4AZ;
 				ENABLE_BITCODE = NO;
 				ENABLE_ONLY_ACTIVE_RESOURCES = YES;
 				INFOPLIST_FILE = Runner/Info.plist;
@@ -695,7 +695,7 @@
 					"@executable_path/Frameworks",
 				);
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.flutterApplication2x;
+				PRODUCT_BUNDLE_IDENTIFIER = abcaaacom.example.flutterApplication2x;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_TEXT_BASED_API = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";

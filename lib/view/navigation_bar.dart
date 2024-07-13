@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/view/floating_button.dart';
 import 'package:flutter_application_1/view/main_screen/screen.dart';
+import 'package:flutter_application_1/view/read_receipt_screen/screen.dart';
 import 'package:flutter_application_1/view/wish_list_item_screen/screen.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
@@ -37,6 +38,10 @@ class NavigationWidget extends HookWidget {
           NavigationDestination(
             icon: Icon(Icons.note_alt),
             label: '買いたい',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.camera_alt),
+            label: 'レシート登録',
           ),
           NavigationDestination(
             // icon: Badge(
@@ -76,6 +81,8 @@ class NavigationWidget extends HookWidget {
         //   ),
         // ),
 
+        const ReadReceiptScreen(),
+
         /// Messages page
         ListView.builder(
           reverse: true,
@@ -85,7 +92,7 @@ class NavigationWidget extends HookWidget {
               return Align(
                 alignment: Alignment.centerRight,
                 child: Container(
-                  margin: const EdgeInsets.all(8.0),
+                  margin: const EdgeInsets.only(top: 8.0),
                   padding: const EdgeInsets.all(8.0),
                   decoration: BoxDecoration(
                     color: theme.colorScheme.primary,
@@ -118,7 +125,7 @@ class NavigationWidget extends HookWidget {
           },
         ),
       ][currentPageIndex.value],
-      floatingActionButton: const FloatingButton(),
+      //floatingActionButton: const FloatingButton(),
     );
   }
 }
