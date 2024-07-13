@@ -40,7 +40,8 @@ class ItemNotifier extends StateNotifier<List<Item>> {
           state: e['state'],
           purchaseDate: e['purchaseDate'],
           deadline: e['deadline'],
-          category: e['category']
+          category: e['category'],
+          image: e['image'],
         ));
       });
       

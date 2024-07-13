@@ -12,6 +12,9 @@ void main() async {
   // DB
   await IsarRepository.configure();
 
+  // ! [for debug] ローカルデータの削除
+  await IsarRepository.deleteAllData();
+
   // GPS
   background_util.setupGpsBackgroundTask();
   // ローカル通知
@@ -55,6 +58,9 @@ class MyApp extends StatelessWidget {
             minimumSize: const Size(200, 45),
           ),
         ),
+        listTileTheme: const ListTileThemeData(
+          tileColor: Color.fromARGB(255, 244, 244, 244),
+        )
       ),
       home: const NavigationWidget(),
     );

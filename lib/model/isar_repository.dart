@@ -29,7 +29,19 @@ class IsarRepository {
 
     debugPrint("isar opened");
   }
+  static deleteAllData() async {
+    if (_isar == null) {
+      debugPrint('deleteAllData: _isar is null, return');
+      return;
+    }
 
+    await isar.writeTxn(() async {
+      await isar.shops.clear();
+      await isar.items.clear();
+      await isar.wishListItems.clear();
+    });
+    debugPrint('deleteAllData: done');
+  }
   // static Future<void> waitForInitialize() async {
   //   while (!isInitializeInProgress) {
   //     await Future.delayed(const Duration(milliseconds: 1000));
