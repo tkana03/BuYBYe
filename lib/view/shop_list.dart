@@ -12,7 +12,6 @@ class ShopList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final shops = ref.watch(shopNotifierProvider);
     final items = ref.watch(itemNotifierProvider);
 
     final now = DateTime.now();
@@ -22,38 +21,17 @@ class ShopList extends ConsumerWidget {
     final filteredFoodItems = items.where((item) {
       final daysLeft = item.deadlineDatetime.difference(now).inDays;
       return item.category == '食料品' && daysLeft <= 7;
-    }).toList();
+    }).toList()
+      ..sort((a, b) => a.deadlineDatetime.difference(now).inDays.compareTo(b.deadlineDatetime.difference(now).inDays));
 
     final filteredDailyItems = items.where((item) {
       final daysLeft = item.deadlineDatetime.difference(now).inDays;
       return item.category == '日用品' && daysLeft <= 14;
-    }).toList();
+    }).toList()
+      ..sort((a, b) => a.deadlineDatetime.difference(now).inDays.compareTo(b.deadlineDatetime.difference(now).inDays));
 
     return Column(
       children: [
-        const ShopDummyInsertButton(),
-        Expanded(
-          child: ListView.builder(
-            itemCount: shops.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                horizontalTitleGap: 30,
-                title: Row(
-                  children: [
-                    Image.network(
-                      'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl-2.jpg',
-                      height: 42,
-                      width: 42,
-                    ),
-                    const SizedBox(width: 16),
-                    Text(shops[index].name),
-                  ],
-                ),
-              );
-            },
-          ),
-        ),
-        const ItemDummyInsertButton(),
         const SizedBox(height: 16),
         const Text(
           '食料品',
@@ -82,6 +60,7 @@ class ShopList extends ConsumerWidget {
                       const SizedBox(width: 10),
                       Expanded(
                         child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
@@ -90,7 +69,7 @@ class ShopList extends ConsumerWidget {
                                   child: Text(
                                     item.name,
                                     style: const TextStyle(
-                                      fontSize: 18,
+                                      fontSize: 16,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -108,7 +87,7 @@ class ShopList extends ConsumerWidget {
                                     item.state,
                                     style: const TextStyle(
                                       color: Colors.white,
-                                      fontSize: 16,
+                                      fontSize: 14,
                                     ),
                                   ),
                                 ),
@@ -123,12 +102,12 @@ class ShopList extends ConsumerWidget {
                                     Text(
                                       ' ${dateFormat.format(item.purchaseDatetime)}',
                                       style: const TextStyle(
-                                        fontSize: 12,
+                                        fontSize: 15,
                                       ),
                                     ),
                                   ],
                                 ),
-                                const SizedBox(width: 16), // スペースを追加
+                                const SizedBox(width: 15), // スペースを追加
                                 Expanded(
                                   child: Center(
                                     child: Row(
@@ -137,20 +116,15 @@ class ShopList extends ConsumerWidget {
                                         Text(
                                           ' あと',
                                           style: const TextStyle(
-                                            fontSize: 14,
+                                            fontSize: 12,
                                           ),
                                         ),
                                         Text(
-                                          '$daysLeft',
+                                          '$daysLeft日',
                                           style: const TextStyle(
-                                            fontSize: 16,
+                                            fontSize: 15,
                                             color: Colors.red,
-                                          ),
-                                        ),
-                                        Text(
-                                          '日',
-                                          style: const TextStyle(
-                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
                                           ),
                                         ),
                                       ],
@@ -197,37 +171,15 @@ class ShopList extends ConsumerWidget {
                       const SizedBox(width: 10),
                       Expanded(
                         child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    item.name,
-                                    style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 4,
-                                    horizontal: 8,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: _getStateColor(item.state),
-                                    borderRadius: BorderRadius.circular(18),
-                                  ),
-                                  child: Text(
-                                    item.state,
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                              ],
+                            Text(
+                              item.name,
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                             const SizedBox(height: 5),
                             Row(
@@ -238,7 +190,7 @@ class ShopList extends ConsumerWidget {
                                     Text(
                                       ' ${dateFormat.format(item.purchaseDatetime)}',
                                       style: const TextStyle(
-                                        fontSize: 12,
+                                        fontSize: 15,
                                       ),
                                     ),
                                   ],
@@ -252,20 +204,15 @@ class ShopList extends ConsumerWidget {
                                         Text(
                                           ' あと',
                                           style: const TextStyle(
-                                            fontSize: 14,
+                                            fontSize: 12,
                                           ),
                                         ),
                                         Text(
-                                          '$daysLeft',
+                                          '$daysLeft日',
                                           style: const TextStyle(
-                                            fontSize: 16,
+                                            fontSize: 15,
                                             color: Colors.red,
-                                          ),
-                                        ),
-                                        Text(
-                                          '日',
-                                          style: const TextStyle(
-                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
                                           ),
                                         ),
                                       ],
