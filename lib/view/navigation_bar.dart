@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/view/floating_button.dart';
 import 'package:flutter_application_1/view/item_list_screen/screen.dart';
 import 'package:flutter_application_1/view/main_screen/screen.dart';
-import 'package:flutter_application_1/view/read_receipt_screen/receipt_item.dart';
 import 'package:flutter_application_1/view/wish_list_item_screen/screen.dart';
 import 'package:flutter_application_1/view/read_receipt_screen/screen.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class NavigationWidget extends HookWidget {
+final navigatationWidgetPageIndexFormProvider = StateProvider<int>((ref) => 0);
+
+class NavigationWidget extends ConsumerWidget {
   const NavigationWidget({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final currentPageIndex = useState(0);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentPageIndex = ref.watch(navigatationWidgetPageIndexFormProvider);
 
+    final ThemeData theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         leading: Padding(
@@ -26,9 +29,11 @@ class NavigationWidget extends HookWidget {
       ),
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (int index) {
-          currentPageIndex.value = index;
+          // currentPageIndex.value = index;
+          ref.read(navigatationWidgetPageIndexFormProvider.notifier).state =
+              index;
         },
-        selectedIndex: currentPageIndex.value,
+        selectedIndex: currentPageIndex,
         destinations: const <Widget>[
           NavigationDestination(
             selectedIcon: Icon(Icons.home),
@@ -47,11 +52,6 @@ class NavigationWidget extends HookWidget {
             icon: Icon(Icons.list_alt),
             label: '在庫一覧',
           ),
-          // ![for debug] カメラ撮影後の遷移先（シミュレータでカメラを起動できないため、これをスキップしたもの）
-          // NavigationDestination(
-          //   icon: Icon(Icons.add),
-          //   label: '[dev]',
-          // ),
         ],
       ),
       body: <Widget>[
@@ -69,7 +69,7 @@ class NavigationWidget extends HookWidget {
 
         // ![for debug] カメラ撮影後の遷移先（シミュレータでカメラを起動できないため、これをスキップしたもの）
         // RegisterItemScreen(),
-      ][currentPageIndex.value],
+      ][currentPageIndex],
     );
   }
 }

@@ -36,7 +36,7 @@ class IsarRepository {
     }
 
     await isar.writeTxn(() async {
-      await isar.shops.clear();
+      //await isar.shops.clear();
       await isar.items.clear();
       await isar.wishListItems.clear();
     });

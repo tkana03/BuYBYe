@@ -116,22 +116,18 @@ class WishListItemForm extends HookConsumerWidget {
                     return ListTile(
                       title: Row(
                         children: [
-                          Image.network(
-                            'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl-2.jpg',
-                            height: 30,
-                            width: 30,
-                          ),
+                          Text(wishListItems[index].name!),
                           const SizedBox(width: 16),
-                          Row(
-                            children: [
-                              Text(wishListItems[index].name!),
-                              const SizedBox(width: 16),
-                              Text(
-                                wishListItems[index].shop.value?.name ?? '',
-                                style: const TextStyle(color: Colors.blue),
-                              ),
-                            ],
-                          )
+                          Text(
+                            wishListItems[index].shop.value?.name ?? '',
+                            style: const TextStyle(color: Colors.blue),
+                          ),
+                          const Spacer(),
+                          IconButton(
+                              onPressed: () {
+                                debugPrint("[future] delete");
+                              },
+                              icon: const Icon(Icons.delete))
                         ],
                       ),
                     );

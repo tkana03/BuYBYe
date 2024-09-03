@@ -25,7 +25,10 @@ class ReadReceiptScreen extends HookConsumerWidget {
         child: Column(
           children: [
             const SizedBox(height: 35),
-            const Center(child: Text('レシート撮影', style: TextStyle(fontSize: 24))),
+            const Center(
+                child: Text('レシート撮影',
+                    style:
+                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold))),
             const SizedBox(height: 15),
             FutureBuilder<void>(
               future: initializeControllerFuture,
