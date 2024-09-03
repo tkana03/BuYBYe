@@ -56,15 +56,15 @@
         "state": "常温",
         "purchaseDate": "2024-04-25",
         "deadline": "2024-07-25",
-        "image": "assets/items/001_95㎜_348g.png",
+        "image": "assets/items/25131009.png",
         "category": "日用品"
     },
     {
-        "name": "日焼け止め",
+        "name": "シャンプー",
         "state": "常温",
         "purchaseDate": "2024-05-15",
         "deadline": "2024-07-15",
-        "image": "assets/items/001_95㎜_348g.png",
+        "image": "assets/items/25408743.png",
         "category": "日用品"
     }
 ]

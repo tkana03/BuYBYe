@@ -11,7 +11,7 @@ class ShopList extends ConsumerWidget {
     final items = ref.watch(itemNotifierProvider);
 
     final now = DateTime.now();
-    final dateFormat = DateFormat('M月dd日');
+    final dateFormat = DateFormat('M月d日');
 
     // 食料品と日用品のフィルタリング処理
     final filteredFoodItems = items.where((item) {
@@ -34,10 +34,11 @@ class ShopList extends ConsumerWidget {
 
     // 両方のリストを一つのListViewで表示
     final combinedList = <Widget>[
+      const SizedBox(height: 16),
       const Center (
         child: Text(
         '食料品',
-        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
       )),
       const SizedBox(height: 16),
       ...filteredFoodItems.map((item) {
@@ -139,7 +140,7 @@ class ShopList extends ConsumerWidget {
       const SizedBox(height: 16),
       const Center (child : Text(
         '日用品',
-        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
       ),),
       const SizedBox(height: 16),
       ...filteredDailyItems.map((item) {

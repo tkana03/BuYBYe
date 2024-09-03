@@ -7,7 +7,18 @@ import 'package:flutter_application_1/schema/shops.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:isar/isar.dart';
 
-List<ShopLocation> shopLocationList = [];
+DateTime? lastNotifyAt = null;
+// List<ShopLocation> shopLocationList = [];
+List<ShopLocation> shopLocationList = [
+  ShopLocation(Shop(
+    id: 1,
+    name: "セブンイレブン",
+    longName: "セブンイレブン つくば天久保４丁目店",
+    address: "〒305-0005 茨城県つくば市天久保４丁目２−３",
+    lat: 36.10521304398989,
+    lng: 140.10962965408586,
+  ))
+];
 
 /// GPS
 void setupGpsBackgroundTask() async {
@@ -20,16 +31,30 @@ void setupGpsBackgroundTask() async {
 void backgroundHandler(Location data) {
   Future(() async {
     debugPrint('backgroundHandler: ${DateTime.now()}, $data');
-    final shops = await IsarRepository.isar.shops.where().findAll();
+    // todo: うまく取れてない
+    // 初期化されるのをmainで待ってるはずだけど、isarがnullでエラーが出る
+    // configureしたらエラーは無くなるけど、shops.length = 0 になる
 
-    for (var shop in shops) {
-      final shopLocation = ShopLocation(shop);
-      // 対象の店舗が増えた場合はリストに追加
-      // バックグラウンド時は消える可能性もありそうなので、この関数が呼ばれるたびに追加するようにしている
-      if (!shopLocationList.contains(shopLocation)) {
-        shopLocationList.add(shopLocation);
-      }
+    // await IsarRepository.configure();
+    // final shops = await IsarRepository.isar.shops.where().findAll();
+    // showLocalNotification(
+    //     title: "get shops...", message: "shops.length = ${shops.length}");
+
+    // for (var shop in shops) {
+    //   final shopLocation = ShopLocation(shop);
+    //   // 対象の店舗が増えた場合はリストに追加
+    //   // バックグラウンド時は消える可能性もありそうなので、この関数が呼ばれるたびに追加するようにしている
+    //   if (!shopLocationList.contains(shopLocation)) {
+    //     shopLocationList.add(shopLocation);
+    //   }
+    // }
+    lastNotifyAt ??= DateTime.now();
+
+    // 30sごとに通知（30s以内はreturn）
+    if (DateTime.now().difference(lastNotifyAt!) < const Duration(seconds: 30)) {
+      return;
     }
+    lastNotifyAt = DateTime.now();
 
     final other = LatLng(data.lat ?? 0, data.lng ?? 0);
     for (var shopLocation in shopLocationList) {

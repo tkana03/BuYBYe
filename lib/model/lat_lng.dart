@@ -38,11 +38,13 @@ class LatLng {
 
     final isLatWithin = lat60.angle == otherLat60.angle &&
         lat60.minute == otherLat60.minute &&
-        (lat60.second - otherLat60.second).abs() < 3.75;
+       // (lat60.second - otherLat60.second).abs() < 3.75;
+                (lat60.second - otherLat60.second).abs() < 7.5;
 
     final isLngWithin = lng60.angle == otherLng60.angle &&
         lng60.minute == otherLng60.minute &&
-        (lng60.second - otherLng60.second).abs() < 5.625;
+       // (lng60.second - otherLng60.second).abs() < 5.625;
+               (lng60.second - otherLng60.second).abs() < 11.2;
 
     // final latAngle1 = lat.truncate();
     // final latMinute1 = ((lat - latAngle1) * 60).truncate();
