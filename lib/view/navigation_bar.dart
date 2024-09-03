@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/view/floating_button.dart';
 import 'package:flutter_application_1/view/item_list_screen/screen.dart';
 import 'package:flutter_application_1/view/main_screen/screen.dart';
 import 'package:flutter_application_1/view/wish_list_item_screen/screen.dart';
@@ -14,6 +15,7 @@ class NavigationWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentPageIndex = ref.watch(navigatationWidgetPageIndexFormProvider);
 
+    final ThemeData theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         leading: Padding(
@@ -50,11 +52,6 @@ class NavigationWidget extends ConsumerWidget {
             icon: Icon(Icons.list_alt),
             label: '在庫一覧',
           ),
-          // ![for debug] カメラ撮影後の遷移先（シミュレータでカメラを起動できないため、これをスキップしたもの）
-          // NavigationDestination(
-          //   icon: Icon(Icons.add),
-          //   label: '[dev]',
-          // ),
         ],
       ),
       body: <Widget>[
