@@ -5,6 +5,7 @@ import 'package:flutter_application_1/view/main_screen/screen.dart';
 import 'package:flutter_application_1/view/wish_list_item_screen/screen.dart';
 import 'package:flutter_application_1/view/read_receipt_screen/screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_application_1/view/ocr_receipt/dummy_screen.dart';
 
 final navigatationWidgetPageIndexFormProvider = StateProvider<int>((ref) => 0);
 
@@ -56,7 +57,8 @@ class NavigationWidget extends ConsumerWidget {
       ),
       body: <Widget>[
         /// top page
-        const MainScreen(),
+        const MainScreen(), // todo: あとでもどす
+        // const OcrReceiptWidget(),
 
         /// wish list page
         const WishListItemScreen(),
@@ -64,7 +66,7 @@ class NavigationWidget extends ConsumerWidget {
         /// read receipt page
         const ReadReceiptScreen(),
 
-        // item list page
+        /// item list page
         const ItemListScreen(),
 
         // ![for debug] カメラ撮影後の遷移先（シミュレータでカメラを起動できないため、これをスキップしたもの）

@@ -30,7 +30,6 @@ void setupGpsBackgroundTask() async {
 @pragma('vm:entry-point')
 void backgroundHandler(Location data) {
   Future(() async {
-    debugPrint('backgroundHandler: ${DateTime.now()}, $data');
     // todo: うまく取れてない
     // 初期化されるのをmainで待ってるはずだけど、isarがnullでエラーが出る
     // configureしたらエラーは無くなるけど、shops.length = 0 になる
@@ -51,10 +50,12 @@ void backgroundHandler(Location data) {
     lastNotifyAt ??= DateTime.now();
 
     // 30sごとに通知（30s以内はreturn）
-    if (DateTime.now().difference(lastNotifyAt!) < const Duration(seconds: 30)) {
+    if (DateTime.now().difference(lastNotifyAt!) <
+        const Duration(seconds: 30)) {
       return;
     }
     lastNotifyAt = DateTime.now();
+    debugPrint('backgroundHandler: ${DateTime.now()}, $data');
 
     final other = LatLng(data.lat ?? 0, data.lng ?? 0);
     for (var shopLocation in shopLocationList) {

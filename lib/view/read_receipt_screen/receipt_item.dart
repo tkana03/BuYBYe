@@ -10,9 +10,19 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:isar/isar.dart';
 
 class ReceiptItem {
-  String? name;
-  int? price;
-  String? status;
+  ReceiptItem({
+    this.name = "",
+    this.price = 0,
+    this.status = "常温",
+    this.purchase,
+    this.deadline,
+    this.image,
+    this.category,
+  });
+
+  String name;
+  int price;
+  String status;
   String? purchase;
   String? deadline;
   String? image = "assets/items/001_95㎜_348g.png";
@@ -20,9 +30,6 @@ class ReceiptItem {
 
   bool isChecked = false;
 
-  String get nameX => name!;
-  int get priceX => price!;
-  String get statusX => status!;
   String get categoryX => category!;
   String get imageX => image!;
   DateTime get deadlineDatetime => DateTime.parse(deadline!);
@@ -49,7 +56,7 @@ class RegisterItemState extends StateNotifier<List<ReceiptItem>> {
     state = [
       for (int i = 0; i < state.length; i++)
         if (i == index)
-          state[i]..status = _getNextStatus(state[i].statusX)
+          state[i]..status = _getNextStatus(state[i].status)
         else
           state[i],
     ];
@@ -62,17 +69,18 @@ class RegisterItemState extends StateNotifier<List<ReceiptItem>> {
     ];
   }
 
-  Future<void> addItem(String name, int price, String status) async {
-    final item = ReceiptItem()
-      ..name = name
-      ..price = price
-      ..status = status
-      ..category = "食料品"
-      ..image = "assets/items/001_187mm_95g.png"
-      ..deadline = "2025-01-15"
-      ..purchase = "2024-07-13";
+  Future<void> clearItems() async {
+    state = [];
+  }
 
+  Future<void> addItem(ReceiptItem item) async {
     state = [...state, item];
+  }
+
+  Future<void> addItems(List<ReceiptItem> items) async {
+    for (var item in items) {
+      addItem(item);
+    }
   }
 
   Future<void> insertItemToDB(WidgetRef ref) async {
@@ -82,8 +90,8 @@ class RegisterItemState extends StateNotifier<List<ReceiptItem>> {
     for (var item in state) {
       final fmtItem = Item(
         id: Isar.autoIncrement,
-        name: item.nameX,
-        state: item.statusX,
+        name: item.name,
+        state: item.status,
         // price: item.priceX,
         category: item.categoryX,
         deadline: item.deadline!,
@@ -91,7 +99,7 @@ class RegisterItemState extends StateNotifier<List<ReceiptItem>> {
         image: item.imageX,
       );
       fmtItems.add(fmtItem);
-      debugPrint(fmtItem.toString());
+      print(fmtItem);
     }
 
     // 他で使っているプロバイダでDBに書き込む（他のref.watchに反映させるため）
@@ -105,30 +113,30 @@ final registerItemProvider =
     StateNotifierProvider<RegisterItemState, List<ReceiptItem>>(
   (ref) => RegisterItemState(
     [
-      ReceiptItem()
-        ..name = "アルフォート　ミニチョコレート"
-        ..price = 98
-        ..status = "冷蔵"
-        ..category = "食料品"
-        ..deadline = "2025-03-31"
-        ..image = "assets/items/008_157mm_50g.png"
-        ..purchase = "2024-07-13",
-      ReceiptItem()
-        ..name = "ホイップ植物性脂肪"
-        ..price = 178
-        ..status = "冷蔵"
-        ..category = "食料品"
-        ..deadline = "2024-07-21"
-        ..image = "assets/items/003_3mm_4g.png"
-        ..purchase = "2024-07-13",
-      ReceiptItem()
-        ..name = "ガーナ　ブラック"
-        ..price = 324
-        ..status = "冷蔵"
-        ..category = "食料品"
-        ..deadline = "2024-08-21"
-        ..image = "assets/items/008_157mm_50g.png"
-        ..purchase = "2024-07-13",
+      // ReceiptItem()
+      //   ..name = "アルフォート　ミニチョコレート"
+      //   ..price = 98
+      //   ..status = "冷蔵"
+      //   ..category = "食料品"
+      //   ..deadline = "2025-03-31"
+      //   ..image = "assets/items/008_157mm_50g.png"
+      //   ..purchase = "2024-07-13",
+      // ReceiptItem()
+      //   ..name = "ホイップ植物性脂肪"
+      //   ..price = 178
+      //   ..status = "冷蔵"
+      //   ..category = "食料品"
+      //   ..deadline = "2024-07-21"
+      //   ..image = "assets/items/003_3mm_4g.png"
+      //   ..purchase = "2024-07-13",
+      // ReceiptItem()
+      //   ..name = "ガーナ　ブラック"
+      //   ..price = 324
+      //   ..status = "冷蔵"
+      //   ..category = "食料品"
+      //   ..deadline = "2024-08-21"
+      //   ..image = "assets/items/008_157mm_50g.png"
+      //   ..purchase = "2024-07-13",
       // * 最後のデータはデモの追加用
       // Item()
       //   ..name = "大阪王将　羽付き餃子"
@@ -211,13 +219,13 @@ class RegisterItemScreen extends HookConsumerWidget {
                         child: SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: Text(
-                            item.nameX,
+                            item.name,
                             //overflow: TextOverflow.ellipsis,
                           ),
                         ),
                       ),
                       // ),
-                      SizedBox(width: 50, child: Text("¥${item.priceX}")),
+                      SizedBox(width: 50, child: Text("¥${item.price}")),
                     ]),
                     trailing: ElevatedButton(
                       onPressed: () => ref
@@ -225,9 +233,9 @@ class RegisterItemScreen extends HookConsumerWidget {
                           .toggleStatus(index),
                       style: ElevatedButton.styleFrom(
                         minimumSize: const Size(50, 40),
-                        backgroundColor: _getStatusColor(item.statusX),
+                        backgroundColor: _getStatusColor(item.status),
                       ),
-                      child: Text(item.statusX),
+                      child: Text(item.status),
                     ),
                   );
                 },
@@ -286,9 +294,16 @@ class RegisterItemScreen extends HookConsumerWidget {
                           debugPrint(e.toString());
                           price = 0;
                         }
-                        ref
-                            .read(registerItemProvider.notifier)
-                            .addItem(name, price, itemStatus);
+
+                        final item = ReceiptItem()
+                          ..name = name
+                          ..price = price
+                          ..status = itemStatus
+                          ..category = "食料品"
+                          ..image = "assets/items/001_187mm_95g.png"
+                          ..deadline = "2025-01-15"
+                          ..purchase = "2024-07-13";
+                        ref.read(registerItemProvider.notifier).addItem(item);
                         ref.read(showAddItemFormProvider.notifier).state =
                             false;
                       },

@@ -13,7 +13,7 @@ class Shop {
     required this.lng,
   });
 
-  Id id;
+  Id id = Isar.autoIncrement;
   String name;
   String longName;
   String address;

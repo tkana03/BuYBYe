@@ -5,6 +5,7 @@ import 'package:flutter_application_1/model/isar_repository.dart';
 import 'package:flutter_application_1/view/navigation_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isar/isar.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,6 +21,9 @@ void main() async {
   // ローカル通知
   background_util.setupLocalNotification();
 
+  // ローカル環境変数（.env）ファイルの読み込み
+  await dotenv.load(fileName: '.env');
+
   runApp(const ProviderScope(child: MyApp()));
 }
 
@@ -29,40 +33,38 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'bUybyE',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
-        useMaterial3: true,
-        scaffoldBackgroundColor: Colors.white,
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.white,
-          foregroundColor: Colors.black,
-          centerTitle: false,
-          elevation: 0,
-          iconTheme: IconThemeData(color: Colors.black),
-          titleTextStyle: TextStyle(
-            color: Colors.black,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            foregroundColor: Colors.white,
-            backgroundColor: Colors.blue,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
+        title: 'BuYBYe',
+        theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
+            useMaterial3: true,
+            scaffoldBackgroundColor: Colors.white,
+            appBarTheme: const AppBarTheme(
+              backgroundColor: Colors.white,
+              foregroundColor: Colors.black,
+              centerTitle: false,
+              elevation: 0,
+              iconTheme: IconThemeData(color: Colors.black),
+              titleTextStyle: TextStyle(
+                color: Colors.black,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-            textStyle:
-                const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            minimumSize: const Size(200, 45),
-          ),
-        ),
-        listTileTheme: const ListTileThemeData(
-          tileColor: Color.fromARGB(255, 244, 244, 244),
-        )
-      ),
-      home: const NavigationWidget()
-    );
+            elevatedButtonTheme: ElevatedButtonThemeData(
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.blue,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                textStyle:
+                    const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                minimumSize: const Size(200, 45),
+              ),
+            ),
+            listTileTheme: const ListTileThemeData(
+              tileColor: Color.fromARGB(255, 244, 244, 244),
+            )),
+        home: const NavigationWidget());
   }
 }

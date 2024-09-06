@@ -13,7 +13,8 @@ class CameraStateNotifier extends StateNotifier<CameraController?> {
       final camera = cameras.first;
       final controller = CameraController(
         camera,
-        ResolutionPreset.medium,
+        // ResolutionPreset.medium,
+        ResolutionPreset.max,
       );
 
       // await controller.initialize();

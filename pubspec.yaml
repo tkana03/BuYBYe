@@ -46,9 +46,13 @@ dependencies:
   flutter_hooks: ^0.20.5
   hooks_riverpod: ^2.5.1
   flutter_local_notifications: ^17.2.1+1
-  camera: ^0.11.0+1
+  camera: ^0.11.0+2
   path: ^1.9.0
   flutter_launcher_icons: ^0.13.1
+  google_mlkit_text_recognition: ^0.13.0
+  google_generative_ai: ^0.4.5
+  flutter_dotenv: ^5.1.0
+  http: ^1.2.2
 
 dev_dependencies:
   flutter_test:
@@ -87,6 +91,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    - .env
     - assets/shops.json
     - assets/items.json
     - assets/logo/logo.png
